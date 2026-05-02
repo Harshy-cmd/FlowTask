@@ -57,7 +57,8 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null
 }
 
-function MetricCard({ label, value, change, positive, icon: Icon, sub }) {
+function MetricCard({ label, value, change, positive, icon, sub }) {
+  const Icon = icon;
   return (
     <div className="bg-white/60 border border-[#064734]/10 rounded-2xl p-5 card-hover">
       <div className="flex items-start justify-between mb-3">
@@ -90,7 +91,7 @@ function InsightCard({ title, value, desc, color, icon }) {
 }
 
 export default function Analytics() {
-  const { tasks, habits, completedTasks, totalTasks, completedHabits, totalHabits } = useApp()
+  const { habits, completedTasks, totalTasks, completedHabits, totalHabits } = useApp()
 
   const taskRate = totalTasks ? Math.round((completedTasks / totalTasks) * 100) : 0
   const habitRate = totalHabits ? Math.round((completedHabits / totalHabits) * 100) : 0

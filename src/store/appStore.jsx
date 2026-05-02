@@ -20,6 +20,7 @@ const initialHabits = [
   { id: 6, name: 'Journaling', icon: '✍️', streak: 9, completedToday: false, frequency: 'daily', category: 'Wellness', history: [1,1,1,1,0,1,1,1,1,0,1,1,1,1], color: '#064734' },
 ]
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AppContext = createContext(null)
 
 export function AppProvider({ children }) {
@@ -84,4 +85,5 @@ export function AppProvider({ children }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useApp = () => useContext(AppContext)

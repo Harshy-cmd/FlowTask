@@ -37,11 +37,13 @@ export default function Layout({ children }) {
 
           {/* Nav */}
           <nav className="flex-1 px-4 py-6 space-y-1">
-            {navItems.map(({ to, label, icon: Icon }) => (
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
               <NavLink
-                key={to}
-                to={to}
-                end={to === '/'}
+                key={item.to}
+                to={item.to}
+                end={item.to === '/'}
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 ${
@@ -52,11 +54,10 @@ export default function Layout({ children }) {
                 }
               >
                 <Icon size={18} />
-                {label}
+                {item.label}
               </NavLink>
-            ))}
+            )})}
           </nav>
-
           {/* User section */}
           <div className="px-4 py-6 border-t border-[#0a6b4e]">
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#0a6b4e]">

@@ -209,18 +209,20 @@ export default function Habits() {
           { label: 'Best Streak', value: `${bestStreak}d`, icon: Flame, sub: 'days in a row', color: 'bg-orange-500 text-white' },
           { label: 'Total Streaks', value: totalStreak, icon: Zap, sub: 'combined days', color: 'bg-purple-600 text-white' },
           { label: 'Perfect Days', value: perfectDays, icon: Trophy, sub: 'this month', color: 'bg-yellow-500 text-white' },
-        ].map(({ label, value, icon: Icon, sub, color }) => (
-          <div key={label} className={`${color} rounded-2xl p-5 flex items-center gap-3 card-hover`}>
+        ].map((item) => {
+          const Icon = item.icon;
+          return (
+          <div key={item.label} className={`${item.color} rounded-2xl p-5 flex items-center gap-3 card-hover`}>
             <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
               <Icon size={18} />
             </div>
             <div>
-              <div className="text-2xl font-bold leading-none">{value}</div>
-              <div className="text-xs opacity-70 mt-1">{label}</div>
-              <div className="text-xs opacity-50 mt-0.5">{sub}</div>
+              <div className="text-2xl font-bold leading-none">{item.value}</div>
+              <div className="text-xs opacity-70 mt-1">{item.label}</div>
+              <div className="text-xs opacity-50 mt-0.5">{item.sub}</div>
             </div>
           </div>
-        ))}
+        )})}
       </div>
 
       {/* Daily overview for this week */}

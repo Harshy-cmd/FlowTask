@@ -12,7 +12,8 @@ const quotes = [
   "Done is better than perfect.",
 ]
 
-function StatCard({ label, value, sub, icon: Icon, accent }) {
+function StatCard({ label, value, sub, icon, accent }) {
+  const Icon = icon;
   return (
     <div className="bg-white/60 border border-[#064734]/10 rounded-2xl p-5 flex items-center gap-4 card-hover">
       <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${accent}`}>
@@ -30,7 +31,6 @@ function StatCard({ label, value, sub, icon: Icon, accent }) {
 export default function Dashboard() {
   const { tasks, habits, completedTasks, totalTasks, completedHabits, totalHabits, toggleTask } = useApp()
 
-  const todayTasks = tasks.filter(t => !t.done).slice(0, 5)
   const taskProgress = totalTasks ? Math.round((completedTasks / totalTasks) * 100) : 0
   const habitProgress = totalHabits ? Math.round((completedHabits / totalHabits) * 100) : 0
   const topStreak = Math.max(...habits.map(h => h.streak))
@@ -218,22 +218,24 @@ export default function Dashboard() {
           { to: '/tasks', label: 'Add a Task', desc: 'Capture what needs doing', icon: CheckCircle2, color: 'bg-[#064734] text-[#E0FFC2]' },
           { to: '/habits', label: 'Check Habits', desc: 'Build your streaks', icon: Flame, color: 'bg-[#064734] text-[#E0FFC2]' },
           { to: '/analytics', label: 'View Progress', desc: 'See your productivity', icon: TrendingUp, color: 'bg-[#064734] text-[#E0FFC2]' },
-        ].map(({ to, label, desc, icon: Icon, color }) => (
+        ].map((item) => {
+          const Icon = item.icon;
+          return (
           <Link
-            key={to}
-            to={to}
-            className={`${color} rounded-2xl p-5 flex items-center gap-4 card-hover group`}
+            key={item.to}
+            to={item.to}
+            className={`${item.color} rounded-2xl p-5 flex items-center gap-4 card-hover group`}
           >
             <div className="w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center">
               <Icon size={20} />
             </div>
             <div className="flex-1">
-              <div className="font-semibold text-sm">{label}</div>
-              <div className="text-xs opacity-60 mt-0.5">{desc}</div>
+              <div className="font-semibold text-sm">{item.label}</div>
+              <div className="text-xs opacity-60 mt-0.5">{item.desc}</div>
             </div>
             <ArrowRight size={16} className="opacity-60 group-hover:translate-x-1 transition-transform" />
           </Link>
-        ))}
+        )})}
       </div>
     </div>
   )
