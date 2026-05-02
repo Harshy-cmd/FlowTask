@@ -95,7 +95,9 @@ export default function Layout({ children }) {
               </h2>
             </div>
             <div className="flex items-center gap-3 ml-auto">
-              <div className="text-sm text-[#064734]/60">Sun, Apr 20 · 2026</div>
+              <div className="text-sm text-[#064734]/60">
+                {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+              </div>
               <div className="w-8 h-8 rounded-full bg-[#064734] flex items-center justify-center text-[#E0FFC2] font-bold text-sm">
                 A
               </div>

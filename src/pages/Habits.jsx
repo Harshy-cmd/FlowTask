@@ -87,13 +87,20 @@ function HabitCard({ habit, onToggle }) {
   )
 }
 
-function AddHabitModal({ onClose }) {
+function AddHabitModal({ onAdd, onClose }) {
   const [form, setForm] = useState({
     name: '',
     icon: '🎯',
     category: 'Wellness',
     frequency: 'daily',
   })
+
+  const submit = (e) => {
+    e.preventDefault()
+    if (!form.name.trim()) return
+    onAdd(form)
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={onClose}>
@@ -107,9 +114,9 @@ function AddHabitModal({ onClose }) {
             <X size={18} className="text-[#064734]" />
           </button>
         </div>
-        <div className="px-6 py-5 space-y-4">
+        <form onSubmit={submit} className="px-6 py-5 space-y-4">
           <div>
-            <label className="text-xs font-semibold text-[#064734]/70 mb-1.5 block uppercase tracking-wide">Habit Name</label>
+            <label className="text-xs font-semibold text-[#064734]/70 mb-1.5 block uppercase tracking-wide">Habit Name *</label>
             <input
               type="text"
               value={form.name}
@@ -124,6 +131,7 @@ function AddHabitModal({ onClose }) {
             <div className="flex flex-wrap gap-2">
               {EMOJI_OPTIONS.map(emoji => (
                 <button
+                  type="button"
                   key={emoji}
                   onClick={() => setForm(p => ({ ...p, icon: emoji }))}
                   className={`w-10 h-10 rounded-xl text-xl flex items-center justify-center transition-all ${
@@ -148,24 +156,24 @@ function AddHabitModal({ onClose }) {
             </select>
           </div>
           <div className="flex gap-3 pt-2">
-            <button onClick={onClose} className="flex-1 py-3 rounded-xl border border-[#064734]/20 text-[#064734] text-sm font-medium hover:bg-[#064734]/5">
+            <button type="button" onClick={onClose} className="flex-1 py-3 rounded-xl border border-[#064734]/20 text-[#064734] text-sm font-medium hover:bg-[#064734]/5">
               Cancel
             </button>
             <button
-              onClick={onClose}
-              className="flex-1 py-3 rounded-xl bg-[#064734] text-[#E0FFC2] text-sm font-semibold hover:bg-[#0a6b4e]"
+              type="submit"
+              className="flex-1 py-3 rounded-xl bg-[#064734] text-[#E0FFC2] text-sm font-semibold hover:bg-[#0a6b4e] transition-colors"
             >
               Create Habit
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   )
 }
 
 export default function Habits() {
-  const { habits, toggleHabit, completedHabits, totalHabits } = useApp()
+  const { habits, toggleHabit, addHabit, completedHabits, totalHabits } = useApp()
   const [showModal, setShowModal] = useState(false)
   const [filter, setFilter] = useState('All')
 
@@ -282,7 +290,7 @@ export default function Habits() {
         ))}
       </div>
 
-      {showModal && <AddHabitModal onClose={() => setShowModal(false)} />}
+      {showModal && <AddHabitModal onAdd={addHabit} onClose={() => setShowModal(false)} />}
     </div>
   )
 }

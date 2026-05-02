@@ -195,13 +195,15 @@ export default function Tasks() {
   const [showModal, setShowModal] = useState(false)
   const [activeTab, setActiveTab] = useState('all') // all | today | upcoming
 
+  const today = new Date().toISOString().split('T')[0]
+
   const filtered = tasks.filter(t => {
     if (!showDone && t.done) return false
     if (category !== 'All' && t.category !== category) return false
     if (priority !== 'all' && t.priority !== priority) return false
     if (search && !t.title.toLowerCase().includes(search.toLowerCase())) return false
-    if (activeTab === 'today') return t.dueDate === '2026-04-20'
-    if (activeTab === 'upcoming') return t.dueDate > '2026-04-20'
+    if (activeTab === 'today') return t.dueDate === today
+    if (activeTab === 'upcoming') return t.dueDate > today
     return true
   })
 

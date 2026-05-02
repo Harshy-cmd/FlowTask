@@ -30,6 +30,22 @@ export function AppProvider({ children }) {
     setTasks(prev => [...prev, { ...task, id: Date.now(), done: false }])
   }
 
+  const addHabit = (habit) => {
+    setHabits(prev => [...prev, {
+      ...habit,
+      id: Date.now(),
+      streak: 0,
+      completedToday: false,
+      frequency: habit.frequency || 'daily',
+      color: '#064734',
+      history: Array(14).fill(0),
+    }])
+  }
+
+  const deleteHabit = (id) => {
+    setHabits(prev => prev.filter(h => h.id !== id))
+  }
+
   const toggleTask = (id) => {
     setTasks(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t))
   }
@@ -58,7 +74,8 @@ export function AppProvider({ children }) {
   return (
     <AppContext.Provider value={{
       tasks, habits,
-      addTask, toggleTask, deleteTask, toggleHabit,
+      addTask, toggleTask, deleteTask,
+      addHabit, deleteHabit, toggleHabit,
       completedTasks, totalTasks,
       completedHabits, totalHabits,
     }}>
