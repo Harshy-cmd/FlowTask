@@ -1,7 +1,8 @@
 import { NavLink, useLocation } from 'react-router-dom'
-import { LayoutDashboard, CheckSquare, Repeat2, BarChart3, Leaf, Menu, X } from 'lucide-react'
+import { LayoutDashboard, CheckSquare, Repeat2, BarChart3, Leaf, Menu, X, LogOut } from 'lucide-react'
 import { useState } from 'react'
 import { AppProvider } from '../store/appStore'
+import { useAuth } from '../store/authContext'
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -13,6 +14,11 @@ const navItems = [
 export default function Layout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
+  const { user, logout } = useAuth()
+
+  // Safely fallback if user isn't loaded yet
+  const initial = user?.name?.charAt(0).toUpperCase() || 'U'
+  const name = user?.name || 'User'
 
   return (
     <AppProvider>
@@ -60,14 +66,18 @@ export default function Layout({ children }) {
           </nav>
           {/* User section */}
           <div className="px-4 py-6 border-t border-[#0a6b4e]">
-            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#0a6b4e]">
-              <div className="w-8 h-8 rounded-full bg-[#E0FFC2] flex items-center justify-center text-[#064734] font-bold text-sm">
-                A
+            <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-[#0a6b4e]">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-full bg-[#E0FFC2] flex flex-shrink-0 items-center justify-center text-[#064734] font-bold text-sm">
+                  {initial}
+                </div>
+                <div className="min-w-0 overflow-hidden">
+                  <div className="text-[#E0FFC2] text-sm font-medium truncate">{name}</div>
+                </div>
               </div>
-              <div>
-                <div className="text-[#E0FFC2] text-sm font-medium">Alex Johnson</div>
-                <div className="text-[#E0FFC2]/50 text-xs">Pro Member</div>
-              </div>
+              <button onClick={logout} className="text-[#E0FFC2]/50 hover:text-[#E0FFC2] transition-colors p-1" title="Log out">
+                <LogOut size={16} />
+              </button>
             </div>
           </div>
         </aside>
@@ -100,7 +110,7 @@ export default function Layout({ children }) {
                 {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
               </div>
               <div className="w-8 h-8 rounded-full bg-[#064734] flex items-center justify-center text-[#E0FFC2] font-bold text-sm">
-                A
+                {initial}
               </div>
             </div>
           </header>
