@@ -43,6 +43,35 @@ FlowTask is a beautifully designed, full-stack productivity web application buil
 
 ---
 
+## 📁 Project Structure
+
+```text
+FlowTask/
+├── server/                  # Node.js Backend Environment
+│   ├── src/
+│   │   ├── config/          # Database connection
+│   │   ├── controllers/     # Core logic (Auth, Tasks, Habits)
+│   │   ├── middleware/      # JWT auth guard, Global error handling
+│   │   ├── models/          # Mongoose DB Schemas
+│   │   ├── routes/          # Express API route definitions
+│   │   ├── app.js           # Express app configuration
+│   │   └── server.js        # Backend entry point
+│   └── package.json         # Backend dependencies
+├── src/                     # React Frontend Environment
+│   ├── components/          # Reusable UI components (Layout, ProtectedRoute)
+│   ├── pages/               # Full pages (Dashboard, Login, Tasks, Habits)
+│   ├── services/            # API services (Axios instance)
+│   ├── store/               # Global state (AuthContext, AppContext)
+│   ├── App.jsx              # React Router setup
+│   └── main.jsx             # React entry point
+├── public/                  # Static assets
+├── package.json             # Frontend dependencies
+├── tailwind.config.js       # Tailwind configuration
+└── vite.config.js           # Vite configuration
+```
+
+---
+
 ## 💻 Local Development
 
 Get up and running on your local machine in just a few minutes.
