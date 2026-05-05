@@ -7,7 +7,10 @@ export const AppContext = createContext(null)
 export function AppProvider({ children }) {
   const [tasks, setTasks] = useState([])
   const [habits, setHabits] = useState([])
+  const [error, setError] = useState(null)
   const { user } = useAuth()
+
+  const clearError = () => setError(null)
 
   useEffect(() => {
     if (user) {
@@ -23,8 +26,8 @@ export function AppProvider({ children }) {
     try {
       const response = await api.get('/tasks')
       if (response.data.success) setTasks(response.data.data)
-    } catch (error) {
-      console.error('Failed to fetch tasks', error)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to fetch tasks')
     }
   }
 
@@ -59,8 +62,8 @@ export function AppProvider({ children }) {
         })
         setHabits(mappedHabits)
       }
-    } catch (error) {
-      console.error('Failed to fetch habits', error)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to fetch habits')
     }
   }
 
@@ -68,8 +71,8 @@ export function AppProvider({ children }) {
     try {
       const response = await api.post('/tasks', task)
       if (response.data.success) setTasks(prev => [...prev, response.data.data])
-    } catch (error) {
-      console.error('Failed to add task', error)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to add task')
     }
   }
 
@@ -80,8 +83,8 @@ export function AppProvider({ children }) {
         // We just fetch all to keep it simple, or we could map it
         fetchHabits()
       }
-    } catch (error) {
-      console.error('Failed to add habit', error)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to add habit')
     }
   }
 
@@ -89,8 +92,8 @@ export function AppProvider({ children }) {
     try {
       await api.delete(`/habits/${id}`)
       setHabits(prev => prev.filter(h => h.id !== id))
-    } catch (error) {
-      console.error('Failed to delete habit', error)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to delete habit')
     }
   }
 
@@ -99,8 +102,8 @@ export function AppProvider({ children }) {
       // Optimistic update
       setTasks(prev => prev.map(t => t._id === id ? { ...t, done: !t.done } : t))
       await api.patch(`/tasks/${id}/toggle`)
-    } catch (error) {
-      console.error('Failed to toggle task', error)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to toggle task')
       fetchTasks() // revert on error
     }
   }
@@ -109,8 +112,8 @@ export function AppProvider({ children }) {
     try {
       await api.delete(`/tasks/${id}`)
       setTasks(prev => prev.filter(t => t._id !== id))
-    } catch (error) {
-      console.error('Failed to delete task', error)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to delete task')
     }
   }
 
@@ -133,8 +136,8 @@ export function AppProvider({ children }) {
       }))
       
       await api.patch(`/habits/${id}/toggle`)
-    } catch (error) {
-      console.error('Failed to toggle habit', error)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to toggle habit')
       fetchHabits() // revert on error
     }
   }
@@ -149,7 +152,7 @@ export function AppProvider({ children }) {
 
   return (
     <AppContext.Provider value={{
-      tasks: tasksWithId, habits,
+      tasks: tasksWithId, habits, error, clearError,
       addTask, toggleTask, deleteTask,
       addHabit, deleteHabit, toggleHabit,
       completedTasks, totalTasks,
