@@ -72,7 +72,7 @@ export function AppProvider({ children }) {
       const response = await api.post('/tasks', task)
       if (response.data.success) setTasks(prev => [...prev, response.data.data])
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to add task')
+      if (err.response?.status !== 403) setError(err.response?.data?.error || 'Failed to add task')
     }
   }
 
@@ -84,7 +84,7 @@ export function AppProvider({ children }) {
         fetchHabits()
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to add habit')
+      if (err.response?.status !== 403) setError(err.response?.data?.error || 'Failed to add habit')
     }
   }
 
@@ -93,7 +93,7 @@ export function AppProvider({ children }) {
       await api.delete(`/habits/${id}`)
       setHabits(prev => prev.filter(h => h.id !== id))
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to delete habit')
+      if (err.response?.status !== 403) setError(err.response?.data?.error || 'Failed to delete habit')
     }
   }
 
@@ -103,7 +103,7 @@ export function AppProvider({ children }) {
       setTasks(prev => prev.map(t => t._id === id ? { ...t, done: !t.done } : t))
       await api.patch(`/tasks/${id}/toggle`)
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to toggle task')
+      if (err.response?.status !== 403) setError(err.response?.data?.error || 'Failed to toggle task')
       fetchTasks() // revert on error
     }
   }
@@ -113,7 +113,7 @@ export function AppProvider({ children }) {
       await api.delete(`/tasks/${id}`)
       setTasks(prev => prev.filter(t => t._id !== id))
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to delete task')
+      if (err.response?.status !== 403) setError(err.response?.data?.error || 'Failed to delete task')
     }
   }
 
@@ -137,7 +137,7 @@ export function AppProvider({ children }) {
       
       await api.patch(`/habits/${id}/toggle`)
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to toggle habit')
+      if (err.response?.status !== 403) setError(err.response?.data?.error || 'Failed to toggle habit')
       fetchHabits() // revert on error
     }
   }

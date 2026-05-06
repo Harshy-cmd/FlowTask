@@ -51,6 +51,23 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const guestLogin = async () => {
+    try {
+      const response = await api.post('/auth/guest')
+      if (response.data.success) {
+        localStorage.setItem('flowtask_user', JSON.stringify(response.data.data))
+        setUser(response.data.data)
+        navigate('/')
+        return { success: true }
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data?.error || 'An error occurred during guest login',
+      }
+    }
+  }
+
   const logout = () => {
     localStorage.removeItem('flowtask_user')
     setUser(null)
@@ -58,7 +75,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, guestLogin }}>
       {!loading && children}
     </AuthContext.Provider>
   )

@@ -8,7 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-  const { login, user } = useAuth()
+  const { login, guestLogin, user } = useAuth()
 
   if (user) {
     return <Navigate to="/" />
@@ -20,6 +20,18 @@ export default function Login() {
     setLoading(true)
 
     const result = await login(email, password)
+    if (!result.success) {
+      setError(result.error)
+    }
+
+    setLoading(false)
+  }
+
+  const handleGuestLogin = async () => {
+    setError(null)
+    setLoading(true)
+
+    const result = await guestLogin()
     if (!result.success) {
       setError(result.error)
     }
@@ -96,13 +108,30 @@ export default function Login() {
               </div>
             </div>
 
-            <div>
               <button
                 type="submit"
                 disabled={loading}
                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-[#E0FFC2] bg-[#064734] hover:bg-[#0a6b4e] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#064734] disabled:opacity-70 transition-colors"
               >
                 {loading ? 'Signing in...' : 'Sign in'}
+              </button>
+              
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-[#064734]/20" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-[#064734]/60">Or</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleGuestLogin}
+                disabled={loading}
+                className="w-full flex justify-center py-3 px-4 border border-[#064734] rounded-xl shadow-sm text-sm font-semibold text-[#064734] bg-transparent hover:bg-[#064734]/5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#064734] disabled:opacity-70 transition-colors"
+              >
+                {loading ? 'Loading...' : 'Continue as Guest'}
               </button>
             </div>
           </form>

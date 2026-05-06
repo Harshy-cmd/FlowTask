@@ -8,7 +8,7 @@ const {
   deleteTask,
   toggleTask,
 } = require('../controllers/taskController')
-const { protect } = require('../middleware/auth')
+const { protect, restrictGuest } = require('../middleware/auth')
 const { validateRequest } = require('../middleware/validate')
 
 // All task routes require authentication
@@ -18,6 +18,7 @@ router
   .route('/')
   .get(getTasks)
   .post(
+    restrictGuest,
     [
       check('title', 'Title is required').not().isEmpty(),
       validateRequest
@@ -27,9 +28,9 @@ router
 
 router
   .route('/:id')
-  .put(updateTask)
-  .delete(deleteTask)
+  .put(restrictGuest, updateTask)
+  .delete(restrictGuest, deleteTask)
 
-router.route('/:id/toggle').patch(toggleTask)
+router.route('/:id/toggle').patch(restrictGuest, toggleTask)
 
 module.exports = router

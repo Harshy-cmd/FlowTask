@@ -12,4 +12,14 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 403) {
+      window.dispatchEvent(new CustomEvent('guest-restricted'))
+    }
+    return Promise.reject(error)
+  }
+)
+
 export default api
