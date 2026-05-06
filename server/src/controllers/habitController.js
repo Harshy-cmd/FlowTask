@@ -8,6 +8,22 @@ const getTodayStr = () => new Date().toISOString().split('T')[0]
 // @access  Private
 const getHabits = async (req, res, next) => {
   try {
+    if (req.user && req.user.isGuest) {
+      const today = new Date()
+      const d1 = new Date(today); d1.setDate(d1.getDate() - 1);
+      const d2 = new Date(today); d2.setDate(d2.getDate() - 2);
+      const d3 = new Date(today); d3.setDate(d3.getDate() - 3);
+      
+      return res.status(200).json({
+        success: true,
+        data: [
+          { _id: 'h1', id: 'h1', name: 'Drink Water', icon: '💧', category: 'Health', frequency: 'daily', streak: 3, completedDates: [d1.toISOString().split('T')[0], d2.toISOString().split('T')[0], d3.toISOString().split('T')[0]] },
+          { _id: 'h2', id: 'h2', name: 'Read 10 pages', icon: '📚', category: 'Learning', frequency: 'daily', streak: 0, completedDates: [] },
+          { _id: 'h3', id: 'h3', name: 'Morning Walk', icon: '🏃', category: 'Fitness', frequency: 'daily', streak: 1, completedDates: [d1.toISOString().split('T')[0]] }
+        ]
+      })
+    }
+
     const habits = await Habit.find({ user: req.user.id })
     res.status(200).json({ success: true, data: habits })
   } catch (error) {

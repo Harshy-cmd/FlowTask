@@ -5,6 +5,18 @@ const Task = require('../models/Task')
 // @access  Private
 const getTasks = async (req, res, next) => {
   try {
+    if (req.user && req.user.isGuest) {
+      const today = new Date().toISOString().split('T')[0]
+      return res.status(200).json({
+        success: true,
+        data: [
+          { _id: 'g1', id: 'g1', title: 'Welcome to FlowTask! 👋', category: 'Personal', priority: 'high', dueDate: today, tags: ['welcome'], done: false },
+          { _id: 'g2', id: 'g2', title: 'Try creating a new task', category: 'Learning', priority: 'medium', dueDate: today, tags: ['tutorial'], done: false },
+          { _id: 'g3', id: 'g3', title: 'Explore the habits dashboard', category: 'Work', priority: 'low', dueDate: '', tags: [], done: false }
+        ]
+      })
+    }
+
     const tasks = await Task.find({ user: req.user.id })
     res.status(200).json({ success: true, data: tasks })
   } catch (error) {
