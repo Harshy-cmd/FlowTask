@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { check } = require('express-validator')
-const { register, login, getMe } = require('../controllers/authController')
+const { register, login, getMe, guestLogin } = require('../controllers/authController')
 const { protect } = require('../middleware/auth')
 const { validateRequest } = require('../middleware/validate')
 
@@ -30,5 +30,7 @@ router.post(
 )
 
 router.get('/me', protect, getMe)
+
+router.post('/guest', guestLogin)
 
 module.exports = router

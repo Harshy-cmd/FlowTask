@@ -8,7 +8,7 @@ const {
   deleteHabit,
   toggleHabit,
 } = require('../controllers/habitController')
-const { protect } = require('../middleware/auth')
+const { protect, restrictGuest } = require('../middleware/auth')
 const { validateRequest } = require('../middleware/validate')
 
 // All habit routes require authentication
@@ -18,6 +18,7 @@ router
   .route('/')
   .get(getHabits)
   .post(
+    restrictGuest,
     [
       check('name', 'Name is required').not().isEmpty(),
       validateRequest
@@ -27,9 +28,9 @@ router
 
 router
   .route('/:id')
-  .put(updateHabit)
-  .delete(deleteHabit)
+  .put(restrictGuest, updateHabit)
+  .delete(restrictGuest, deleteHabit)
 
-router.route('/:id/toggle').patch(toggleHabit)
+router.route('/:id/toggle').patch(restrictGuest, toggleHabit)
 
 module.exports = router

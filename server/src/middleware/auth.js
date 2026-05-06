@@ -15,6 +15,12 @@ const protect = async (req, res, next) => {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
+      // Handle guest bypass
+      if (decoded.isGuest) {
+        req.user = { _id: 'guest', name: 'Guest User', isGuest: true }
+        return next()
+      }
+
       // Get user from the token
       req.user = await User.findById(decoded.id).select('-password')
 
@@ -36,4 +42,12 @@ const protect = async (req, res, next) => {
   }
 }
 
-module.exports = { protect }
+const restrictGuest = (req, res, next) => {
+  if (req.user && req.user.isGuest) {
+    res.status(403)
+    return next(new Error('Guest users are not allowed to perform this action. Create an account to save your progress.'))
+  }
+  next()
+}
+
+module.exports = { protect, restrictGuest }

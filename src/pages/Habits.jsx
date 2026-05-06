@@ -287,9 +287,16 @@ export default function Habits() {
 
       {/* Habits grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filtered.map(habit => (
-          <HabitCard key={habit.id} habit={habit} onToggle={toggleHabit} />
-        ))}
+        {filtered.length === 0 ? (
+          <div className="col-span-full text-center py-12 bg-white/40 rounded-2xl border border-[#064734]/5">
+            <Target size={32} className="text-[#064734]/20 mx-auto mb-2" />
+            <p className="text-[#064734]/40 text-sm">No habits found. Start building consistency today!</p>
+          </div>
+        ) : (
+          filtered.map(habit => (
+            <HabitCard key={habit.id} habit={habit} onToggle={toggleHabit} />
+          ))
+        )}
       </div>
 
       {showModal && <AddHabitModal onAdd={addHabit} onClose={() => setShowModal(false)} />}

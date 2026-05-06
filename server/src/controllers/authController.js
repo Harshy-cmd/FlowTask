@@ -97,8 +97,33 @@ const getMe = async (req, res, next) => {
   }
 }
 
+// @desc    Guest Login
+// @route   POST /api/auth/guest
+// @access  Public
+const guestLogin = async (req, res, next) => {
+  try {
+    const token = jwt.sign({ id: 'guest', isGuest: true }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE || '7d',
+    })
+
+    res.json({
+      success: true,
+      data: {
+        _id: 'guest',
+        name: 'Guest User',
+        email: 'guest@flowtask.app',
+        isGuest: true,
+        token,
+      },
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   register,
   login,
   getMe,
+  guestLogin,
 }

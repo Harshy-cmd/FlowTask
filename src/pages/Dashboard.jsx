@@ -4,6 +4,7 @@ import {
   Target, Star, Zap, Clock, ChevronRight, LayoutDashboard
 } from 'lucide-react'
 import { useApp } from '../store/appStore'
+import { useAuth } from '../store/authContext'
 
 const quotes = [
   "The secret of getting ahead is getting started.",
@@ -30,6 +31,7 @@ function StatCard({ label, value, sub, icon, accent }) {
 
 export default function Dashboard() {
   const { tasks, habits, completedTasks, totalTasks, completedHabits, totalHabits, toggleTask } = useApp()
+  const { user } = useAuth()
 
   const taskProgress = totalTasks ? Math.round((completedTasks / totalTasks) * 100) : 0
   const habitProgress = totalHabits ? Math.round((completedHabits / totalHabits) * 100) : 0
@@ -61,7 +63,7 @@ export default function Dashboard() {
                 <span className="text-[#E0FFC2]/70 text-sm">Good morning!</span>
               </div>
               <h1 className="text-3xl lg:text-4xl font-bold text-[#E0FFC2] leading-tight">
-                Ready to crush it,<br />Alex? 🚀
+                Ready to crush it,<br />{user?.name?.split(' ')[0] || 'User'}? 🚀
               </h1>
               <p className="text-[#E0FFC2]/60 mt-3 text-sm max-w-sm italic">"{quote}"</p>
             </div>

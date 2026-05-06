@@ -8,11 +8,13 @@ import Habits from './pages/Habits'
 import Analytics from './pages/Analytics'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import GuestModal from './components/GuestModal'
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <GuestModal />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
